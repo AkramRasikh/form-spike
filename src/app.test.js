@@ -5,6 +5,17 @@ import {cleanup, fireEvent, render} from '@testing-library/react'
 import {act} from 'react-dom/test-utils'
 import App from './app'
 import {createUser, createEmployment, createPayroll} from './api-client'
+import fields from './fields'
+
+const {
+  forms: {personalInfoForm, employmentForm, payrollForm},
+} = fields
+
+const emailError = personalInfoForm.fields[1].pattern.message
+const firstNameMinErr = personalInfoForm.fields[2].rules.minLength.message
+const salaryError = payrollForm.fields[0].pattern.message
+const startDateError = employmentForm.fields[0].pattern.message
+const salaryHelperText = payrollForm.fields[0].helperText
 
 jest.mock('./api-client')
 
@@ -108,11 +119,11 @@ test('(Happy path) Employee should be able to fill form', async () => {
   )
 
   expect(getByRole('button').hasAttribute('disabled')).toBeTruthy()
-  expect(getByText('Entered value does not match email format')).toBeDefined()
-  expect(getAllByText('Must be at least 3 letters').length).toBe(2)
+  expect(getByText(emailError)).toBeDefined()
+  expect(getAllByText(firstNameMinErr).length).toBe(2)
 
   await checkCreateUserDuplicateEmail(emailLabel)
-  expect(getByText('Cannot be that email maite')).toBeDefined()
+  expect(getByText('That email already exists')).toBeDefined()
 
   await viableCreateUserForm(
     emailLabel,
@@ -152,9 +163,9 @@ test('(Happy path) Employee should be able to fill form', async () => {
   expect(getByRole('button').hasAttribute('disabled')).toBeTruthy()
   const salaryLabel = getByLabelText('Salary')
   await checkCreatePayrollFormWarnings(salaryLabel)
-  expect(getByText('Entered value does not match salary')).toBeDefined()
+  expect(getByText(salaryError)).toBeDefined()
   await viableCreatePayrollForm(salaryLabel)
-  expect(getByText('- Only needed for "Employees"')).toBeDefined()
+  expect(getByText(`- ${salaryHelperText}`)).toBeDefined()
   expect(getByRole('button').hasAttribute('disabled')).toBeFalsy()
 
   await act(async () => {
@@ -194,8 +205,8 @@ test('(Happy path) Contractor (non-employee) should be able to fill form', async
   )
 
   expect(getByRole('button').hasAttribute('disabled')).toBeTruthy()
-  expect(getByText('Entered value does not match email format')).toBeDefined()
-  expect(getAllByText('Must be at least 3 letters').length).toBe(2)
+  expect(getByText(emailError)).toBeDefined()
+  expect(getAllByText(firstNameMinErr).length).toBe(2)
 
   await viableCreateUserFormContractor(
     emailLabel,
@@ -221,11 +232,11 @@ test('(Happy path) Contractor (non-employee) should be able to fill form', async
   await act(async () => {
     fireEvent.change(departmentSelect, {target: {value: 'Sales'}})
   })
+
   // Start date not required
   expect(getByRole('button').hasAttribute('disabled')).toBeFalsy()
-
   await checkCreateEmployeeFormWarnings(startDateLabel)
-  expect(getByText('Enter a blood clart date')).toBeDefined()
+  expect(getByText(startDateError)).toBeDefined()
   await viableCreateEmployeeForm(startDateLabel, departmentSelect)
 
   await act(async () => {
@@ -238,7 +249,7 @@ test('(Happy path) Contractor (non-employee) should be able to fill form', async
     userId,
   })
 
-  expect(queryByText('- Only needed for "Employees"')).toBeNull()
+  expect(queryByText(`- ${salaryHelperText}`)).toBeNull()
 
   expect(getByText('Contractor')).toBeDefined()
   expect(getByText('legit@email.com')).toBeDefined()

@@ -3,7 +3,7 @@ import SelectInput from '../components/form/select-input'
 
 const checkEmail = email => {
   if (email === 'admin@zelt.com') {
-    return 'Cannot be that email maite'
+    return 'That email already exists'
   }
   return true
 }

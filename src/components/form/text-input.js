@@ -3,9 +3,9 @@ import {object, string} from 'prop-types'
 
 const TextInput = ({type, label, defaultValue, name, register, helperText}) => (
   <>
-    <div>
+    <div style={{display: 'flex'}}>
       <label htmlFor={name}>{label}</label>
-      {helperText && <span>- {helperText}</span>}
+      {helperText && <span>&nbsp;-&nbsp;{helperText}</span>}
     </div>
     <input
       id={name}

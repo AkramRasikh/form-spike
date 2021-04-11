@@ -8,10 +8,6 @@ body {
   pointer-events: none;
 }
 
-fieldset {
-  border: none;
-}
-
 button {
   border: 0;
   background: none;
@@ -27,8 +23,14 @@ select {
   height: 40px;
 }
 
-.nav {
+footer {
   border: 1px solid black;
+  padding: 30px;
+}
+
+nav {
+  border: 1px solid black;
+  padding: 20px;
 }
 
 .input-container {

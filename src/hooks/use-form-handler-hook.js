@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
 import {createUser, createEmployment, createPayroll} from '../api-client'
 
-const useFormHandlerHook = ({formStep, forms, setLoading}) => {
+const useFormHandlerHook = ({formStep, forms, setLoading, sidebarProcess}) => {
   const [fieldStates, setFieldStates] = useState(forms)
   const [formSubmissionText, setFormSubmissionText] = useState('Next')
   const [masterRequire, setMasterRequire] = useState(false)
@@ -9,7 +9,6 @@ const useFormHandlerHook = ({formStep, forms, setLoading}) => {
   const [collectiveFormState, setCollectiveFormState] = useState({})
   const [userId, setUserId] = useState('')
 
-  // const fieldStates
   const {
     firstName,
     email,
