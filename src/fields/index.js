@@ -8,7 +8,7 @@ export default {
     employmentForm,
     payrollForm,
   },
-  sidebarProcess: {
+  sidebarProcessSteps: {
     personalInfoSidebar: {
       text: '1. Personal info',
       step: 'personalInfoForm',

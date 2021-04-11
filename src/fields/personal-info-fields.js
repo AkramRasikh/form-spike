@@ -1,12 +1,6 @@
 import TextInput from '../components/form/text-input'
 import SelectInput from '../components/form/select-input'
-
-const checkEmail = email => {
-  if (email === 'admin@zelt.com') {
-    return 'That email already exists'
-  }
-  return true
-}
+import {checkEmail} from './validation-functions'
 
 export default {
   fields: [

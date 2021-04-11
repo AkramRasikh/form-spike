@@ -19,7 +19,7 @@ const Form = ({
     reset,
   } = useForm({mode: 'onChange'})
 
-  const onSubmit = (data, e) => {
+  const onSubmit = data => {
     setFormValues(prev => ({...prev, ...data}))
     setFormStep(nextFormStep)
   }

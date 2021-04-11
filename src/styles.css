@@ -33,6 +33,10 @@ nav {
   padding: 20px;
 }
 
+.app-container {
+  height: 100vh;
+}
+
 .input-container {
   margin-bottom: 20px;
   height: 60px;
@@ -42,16 +46,31 @@ nav {
   color: red;
 }
 
-.navigation-div {
-  box-shadow: 3px 5px;
-  border: 1px solid;
-}
-
 .disabled-div {
   opacity: 50%;
 }
 
-.navigation-div-default {
+.navigation-div {
   margin: 30px;
   text-align: center;
+}
+
+.navigation-div-active {
+  box-shadow: 3px 5px;
+  border: 1px solid;
+}
+
+.form-container {
+  width: 100%;
+  padding: 30px;
+}
+
+.page-container {
+  display: flex;
+  height: 100%;
+}
+
+.sidebar {
+  width: 40%;
+  border-right: 1px solid;
 }

@@ -1,40 +1,41 @@
 import React, {useState} from 'react'
-import Form from './components/form'
+import classNames from 'classnames'
+import {Form, Sidebar, CompletedDetails, Navbar, Footer} from './components'
 import fields from './fields'
-import Sidebar from './components/sidebar'
 
 import './styles.css'
-import useFormHandlerHook from './hooks/use-form-handler-hook'
-import CompletedDetails from './components/completed-details'
-import Navbar from './components/navbar'
-import Footer from './components/footer'
+import useFormHandler from './hooks/use-form-handler'
 
 function App() {
   const [formStep, setFormStep] = useState('personalInfoForm')
   const [isLoading, setLoading] = useState(false)
-  const {forms, sidebarProcess, formKey} = fields
+  const {forms, sidebarProcessSteps, formKey} = fields
   const {
     formState,
     details,
     formSubmissionText,
     masterRequire,
-  } = useFormHandlerHook({
+  } = useFormHandler({
     formStep,
     forms,
     setLoading,
   })
+  const containerClasses = classNames({
+    'app-container': true,
+    'loading-class': isLoading,
+  })
 
   return (
-    <div style={{height: '100vh'}} className={isLoading ? 'loading-class' : ''}>
+    <div className={containerClasses}>
       <Navbar />
-      <div style={{display: 'flex', height: '100%'}}>
+      <div className="page-container">
         <Sidebar
           formStep={formStep}
           setFormStep={setFormStep}
-          navigationButtons={sidebarProcess}
+          sidebarProcessSteps={sidebarProcessSteps}
           disabled={!formState}
         />
-        <div style={{width: '100%', padding: '30px'}}>
+        <div className="form-container">
           <h1>Onboarding new user</h1>
           {formState ? (
             <Form
