@@ -21,7 +21,7 @@ export default {
       },
       pattern: {
         value: /^\S+@\S+\.\S+$/,
-        message: 'Entered value does not match email format',
+        message: 'Entered value does not match an email format',
       },
       type: 'email',
       InputComponent: TextInput,

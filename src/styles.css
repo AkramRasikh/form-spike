@@ -60,6 +60,10 @@ nav {
   border: 1px solid;
 }
 
+.navigation-div-psuedo-disabled {
+  opacity: 50%;
+}
+
 .form-container {
   width: 100%;
   padding: 30px;
@@ -73,4 +77,12 @@ nav {
 .sidebar {
   width: 40%;
   border-right: 1px solid;
+}
+
+.success-symbol {
+  color: green;
+}
+
+.non-app-sybol {
+  color: red;
 }

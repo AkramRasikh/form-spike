@@ -9,22 +9,27 @@ import useFormHandler from './hooks/use-form-handler'
 function App() {
   const [formStep, setFormStep] = useState('personalInfoForm')
   const [isLoading, setLoading] = useState(false)
-  const {forms, sidebarProcessSteps, formKey} = fields
+  const {forms, sidebarProgressSteps, formKey} = fields
   const {
     formState,
     details,
     formSubmissionText,
     masterRequire,
+    sidebarProgress,
   } = useFormHandler({
     formStep,
     forms,
     setLoading,
+    sidebarProgressSteps,
   })
   const containerClasses = classNames({
     'app-container': true,
     'loading-class': isLoading,
   })
 
+  const heading = formState
+    ? 'Onboarding new user'
+    : 'You are fully onboarded 😃'
   return (
     <div className={containerClasses}>
       <Navbar />
@@ -32,11 +37,11 @@ function App() {
         <Sidebar
           formStep={formStep}
           setFormStep={setFormStep}
-          sidebarProcessSteps={sidebarProcessSteps}
+          sidebarProgress={sidebarProgress}
           disabled={!formState}
         />
         <div className="form-container">
-          <h1>Onboarding new user</h1>
+          <h1>{heading}</h1>
           {formState ? (
             <Form
               setFormStep={setFormStep}

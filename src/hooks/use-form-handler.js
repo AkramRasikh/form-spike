@@ -1,8 +1,14 @@
 import {useState, useEffect} from 'react'
 import {createUser, createEmployment, createPayroll} from '../api-client'
 
-const useFormHandler = ({formStep, forms, setLoading}) => {
+const useFormHandler = ({
+  formStep,
+  forms,
+  setLoading,
+  sidebarProgressSteps,
+}) => {
   const [fieldStates, setFieldStates] = useState(forms)
+  const [sidebarProgress, setSidebarProgress] = useState(sidebarProgressSteps)
   const [formSubmissionText, setFormSubmissionText] = useState('Next')
   const [masterRequire, setMasterRequire] = useState(false)
   const [employeeCreated, setEmployeeCreated] = useState(false)
@@ -23,11 +29,30 @@ const useFormHandler = ({formStep, forms, setLoading}) => {
   const checkIfEmployee = () => {
     if (role === 'Employee') {
       setMasterRequire(true)
+      setSidebarProgress(prev =>
+        prev.map(sideStep => {
+          if (sideStep.step === 'personalInfoForm') {
+            return {...sideStep, status: 'success'}
+          }
+          return sideStep
+        }),
+      )
     } else {
       setFieldStates({
         personalInfoForm,
         employmentForm,
       })
+      setSidebarProgress(prev =>
+        prev.map(sideStep => {
+          if (sideStep.step === 'personalInfoForm') {
+            return {...sideStep, status: 'success'}
+          }
+          if (sideStep.step === 'payrollForm') {
+            return {...sideStep, status: 'n/a'}
+          }
+          return sideStep
+        }),
+      )
       setFormSubmissionText('submit')
     }
   }
@@ -46,9 +71,17 @@ const useFormHandler = ({formStep, forms, setLoading}) => {
   const createEmploymentFunc = async () => {
     try {
       await createEmployment({startDate, department, userId})
-      setFormSubmissionText('submit')
+      setFormSubmissionText('Submit')
       setLoading(false)
       setEmployeeCreated(true)
+      setSidebarProgress(prev =>
+        prev.map(sideStep => {
+          if (sideStep.step === 'employmentForm') {
+            return {...sideStep, status: 'success'}
+          }
+          return sideStep
+        }),
+      )
     } catch (error) {
       setLoading(false)
     }
@@ -57,6 +90,14 @@ const useFormHandler = ({formStep, forms, setLoading}) => {
   const createPayrollFunc = async () => {
     try {
       await createPayroll({userId, startDate, salary})
+      setSidebarProgress(prev =>
+        prev.map(sideStep => {
+          if (sideStep.step === 'payrollForm') {
+            return {...sideStep, status: 'success'}
+          }
+          return sideStep
+        }),
+      )
       setLoading(false)
     } catch (error) {
       setLoading(false)
@@ -85,10 +126,12 @@ const useFormHandler = ({formStep, forms, setLoading}) => {
       },
       formSubmissionText,
       masterRequire,
+      sidebarProgress,
     }
   }
   return {
     details: collectiveFormState,
+    sidebarProgress,
   }
 }
 

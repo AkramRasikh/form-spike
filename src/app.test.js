@@ -1,5 +1,3 @@
-// import '@testing-library/jest-dom/extend-expect'
-// import '@testing-library/jest-dom'
 import React from 'react'
 import {cleanup, fireEvent, render} from '@testing-library/react'
 import {act} from 'react-dom/test-utils'
@@ -16,6 +14,8 @@ const firstNameMinErr = personalInfoForm.fields[2].rules.minLength.message
 const salaryError = payrollForm.fields[0].pattern.message
 const startDateError = employmentForm.fields[0].pattern.message
 const salaryHelperText = payrollForm.fields[0].helperText
+const processHeader = 'Onboarding new user'
+const successHeader = 'You are fully onboarded 😃'
 
 jest.mock('./api-client')
 
@@ -96,7 +96,7 @@ const viableCreatePayrollForm = async salaryLabel => {
   })
 }
 
-test('(Happy path) Employee should be able to fill form', async () => {
+test('Employee should be able to complete form', async () => {
   createUser.mockImplementation(() => userId)
   const {
     getByTestId,
@@ -104,12 +104,19 @@ test('(Happy path) Employee should be able to fill form', async () => {
     getAllByText,
     getByRole,
     getByLabelText,
+    queryByText,
   } = render(<App />)
 
   const emailLabel = getByLabelText('Email')
   const firstNameLabel = getByLabelText('First Name')
   const lastNameLabel = getByLabelText('Last Name')
   const roleLabel = getByTestId('role')
+
+  expect(queryByText('✓')).toBeNull()
+  expect(queryByText('✘')).toBeNull()
+
+  expect(getByText(processHeader)).toBeDefined()
+  expect(queryByText(successHeader)).toBeNull()
 
   await checkCreateUserFormWarnings(
     emailLabel,
@@ -138,14 +145,14 @@ test('(Happy path) Employee should be able to fill form', async () => {
     firstName: 'Akram',
     lastName: 'Rasikh',
   })
-
+  expect(getByText('✓')).toBeDefined()
   // Employment
   expect(getByRole('button').hasAttribute('disabled')).toBeTruthy()
   const startDateLabel = getByLabelText('Start date')
   const departmentSelect = getByTestId('department')
 
   await checkCreateEmployeeFormWarnings(startDateLabel)
-  expect(getByText('Enter a blood clart date')).toBeDefined()
+  expect(getByText(startDateError)).toBeDefined()
   await viableCreateEmployeeForm(startDateLabel, departmentSelect)
   expect(getByRole('button').hasAttribute('disabled')).toBeFalsy()
 
@@ -159,9 +166,11 @@ test('(Happy path) Employee should be able to fill form', async () => {
     userId,
   })
 
+  expect(getAllByText('✓').length).toBe(2)
+
   // payroll form
   expect(getByRole('button').hasAttribute('disabled')).toBeTruthy()
-  const salaryLabel = getByLabelText('Salary')
+  const salaryLabel = getByLabelText('Salary GBP')
   await checkCreatePayrollFormWarnings(salaryLabel)
   expect(getByText(salaryError)).toBeDefined()
   await viableCreatePayrollForm(salaryLabel)
@@ -178,9 +187,17 @@ test('(Happy path) Employee should be able to fill form', async () => {
     userId,
   })
 
+  expect(getAllByText('✓').length).toBe(3)
+  expect(getByText('Employee')).toBeDefined()
   expect(getByText('legit@email.com')).toBeDefined()
+  expect(getByText('11/11/2020')).toBeDefined()
+  expect(getByText('Sales')).toBeDefined()
+  expect(getByText('Akram')).toBeDefined()
+  expect(getByText('Rasikh')).toBeDefined()
+  expect(getByText(successHeader)).toBeDefined()
+  expect(queryByText(processHeader)).toBeNull()
 })
-test('(Happy path) Contractor (non-employee) should be able to fill form', async () => {
+test('Contractor (non-employee) should be able to complete form', async () => {
   createUser.mockImplementation(() => userId)
   const {
     getByTestId,
@@ -195,6 +212,11 @@ test('(Happy path) Contractor (non-employee) should be able to fill form', async
   const firstNameLabel = getByLabelText('First Name')
   const lastNameLabel = getByLabelText('Last Name')
   const roleLabel = getByTestId('role')
+
+  expect(queryByText('✓')).toBeNull()
+  expect(queryByText('✘')).toBeNull()
+  expect(getByText(processHeader)).toBeDefined()
+  expect(queryByText(successHeader)).toBeNull()
 
   await checkCreateUserFormWarnings(
     emailLabel,
@@ -221,6 +243,8 @@ test('(Happy path) Contractor (non-employee) should be able to fill form', async
     firstName: 'Akram',
     lastName: 'Rasikh',
   })
+
+  expect(getByText('✓')).toBeDefined()
 
   // Employment
   expect(getByText('submit')).toBeDefined()
@@ -253,7 +277,10 @@ test('(Happy path) Contractor (non-employee) should be able to fill form', async
 
   expect(getByText('Contractor')).toBeDefined()
   expect(getByText('legit@email.com')).toBeDefined()
-  expect(getByText('Akram')).toBeDefined()
   expect(getByText('11/11/2020')).toBeDefined()
   expect(getByText('Sales')).toBeDefined()
+  expect(getByText('Akram')).toBeDefined()
+  expect(getByText('Rasikh')).toBeDefined()
+  expect(getAllByText('✓').length).toBe(2)
+  expect(getByText('✘')).toBeDefined()
 })

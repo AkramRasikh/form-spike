@@ -8,23 +8,26 @@ export default {
     employmentForm,
     payrollForm,
   },
-  sidebarProcessSteps: {
-    personalInfoSidebar: {
+  sidebarProgressSteps: [
+    {
+      id: 1,
       text: '1. Personal info',
       step: 'personalInfoForm',
       helperText: '',
     },
-    employmentSidebar: {
+    {
+      id: 2,
       text: '2. Employment',
       step: 'employmentForm',
       helperText: '',
     },
-    payrollSidebar: {
+    {
+      id: 3,
       text: '3. Payroll',
       step: 'payrollForm',
       helperText: 'For "Employees"',
     },
-  },
+  ],
   formKey: {
     email: 'Email',
     firstName: 'First Name',
@@ -32,6 +35,6 @@ export default {
     role: 'Role',
     department: 'Department',
     startDate: 'Start Date',
-    salary: 'Salary',
+    salary: 'Salary GBP',
   },
 }

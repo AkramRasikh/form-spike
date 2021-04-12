@@ -4,8 +4,8 @@ export default {
   fields: [
     {
       name: 'salary',
-      label: 'Salary',
-      helperText: 'Only needed for "Employees"',
+      label: 'Salary GBP',
+      helperText: 'Format 25000.00 (GBP)',
       required: 'required',
       type: 'text',
       pattern: {
