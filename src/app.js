@@ -34,12 +34,7 @@ function App() {
     <div className={containerClasses}>
       <Navbar />
       <div className="page-container">
-        <Sidebar
-          formStep={formStep}
-          setFormStep={setFormStep}
-          sidebarProgress={sidebarProgress}
-          disabled={!formState}
-        />
+        <Sidebar formStep={formStep} sidebarProgress={sidebarProgress} />
         <div className="form-container">
           <h1>{heading}</h1>
           {formState ? (
