@@ -1,6 +1,6 @@
 import TextInput from '../components/form/text-input'
 import SelectInput from '../components/form/select-input'
-import {checkEmail} from './validation-functions'
+import {checkEmail} from './validation-helper-methods'
 
 export default {
   fields: [

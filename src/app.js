@@ -7,9 +7,9 @@ import './styles.css'
 import useFormHandler from './hooks/use-form-handler'
 
 function App() {
-  const [formStep, setFormStep] = useState('personalInfoForm')
   const [isLoading, setLoading] = useState(false)
   const {forms, sidebarProgressSteps, formKey} = fields
+  const [formStep, setFormStep] = useState(sidebarProgressSteps[0].step)
   const {
     formState,
     details,

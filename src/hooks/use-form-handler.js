@@ -104,7 +104,7 @@ const useFormHandler = ({
     }
   }
 
-  useEffect(async () => {
+  useEffect(() => {
     if (firstName && email && lastName && !userId) {
       setLoading(true)
       createUserFunc()

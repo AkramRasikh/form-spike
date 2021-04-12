@@ -28,7 +28,6 @@
     "lint": "eslint --ext .js,.jsx --ignore-path .gitignore ."
   },
   "dependencies": {
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "classnames": "^2.3.1",
     "jest": "^26.6.3",
     "prop-types": "^15.7.2",

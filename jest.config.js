@@ -14,8 +14,5 @@ module.exports = {
     __PATH_PREFIX__: ``,
   },
   testURL: `http://localhost`,
-  setupFiles: [
-    '<rootDir>/jest-setup.js',
-    '@testing-library/react/dont-cleanup-after-each',
-  ],
+  setupFiles: ['@testing-library/react/dont-cleanup-after-each'],
 }
