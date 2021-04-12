@@ -16,4 +16,5 @@ export default {
     },
   ],
   nextFormStep: 'createPayroll',
+  formSubmitText: 'Next',
 }

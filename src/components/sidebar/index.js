@@ -1,9 +1,9 @@
 import React from 'react'
 import classNames from 'classnames'
-import {arrayOf, object, string} from 'prop-types'
+import {arrayOf, func, object, string} from 'prop-types'
 import Symbol from './symbol'
 
-const Sidebar = ({formStep, sidebarProgress}) => (
+const Sidebar = ({formStep, sidebarProgress, setFormStep}) => (
   <div className="sidebar">
     {sidebarProgress.map(sideStep => {
       const {step, text, helperText, status, id} = sideStep
@@ -14,10 +14,15 @@ const Sidebar = ({formStep, sidebarProgress}) => (
       })
 
       return (
-        <div key={id} className={sidebarStepsClasses}>
+        <button
+          type="button"
+          key={id}
+          className={sidebarStepsClasses}
+          onClick={() => setFormStep(step)}
+        >
           {text} {status && <Symbol status={status} />} <br />
           <span>{helperText}</span>
-        </div>
+        </button>
       )
     })}
   </div>
@@ -25,6 +30,7 @@ const Sidebar = ({formStep, sidebarProgress}) => (
 
 Sidebar.propTypes = {
   formStep: string.isRequired,
+  setFormStep: func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   sidebarProgress: arrayOf(object).isRequired,
 }

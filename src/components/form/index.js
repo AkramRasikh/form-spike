@@ -8,8 +8,9 @@ const Form = ({
   fields,
   setFormValues,
   setFormStep,
+  formValues,
   nextFormStep,
-  formSubmissionText,
+  formSubmitText,
   masterRequire,
 }) => {
   const {
@@ -48,6 +49,7 @@ const Form = ({
             <InputComponent
               name={name}
               label={label}
+              defaultValue={formValues[name]}
               register={register(name, {
                 required: masterRequire || required,
                 validate,
@@ -61,7 +63,7 @@ const Form = ({
           </div>
         ),
       )}
-      <FormButton disabled={!isValid}>{formSubmissionText}</FormButton>
+      <FormButton disabled={!isValid}>{formSubmitText}</FormButton>
     </form>
   )
 }
@@ -71,7 +73,7 @@ Form.propTypes = {
   fields: arrayOf(object).isRequired,
   setFormValues: func.isRequired,
   setFormStep: func.isRequired,
-  formSubmissionText: string.isRequired,
+  formSubmitText: string.isRequired,
   nextFormStep: string.isRequired,
   masterRequire: bool.isRequired,
 }

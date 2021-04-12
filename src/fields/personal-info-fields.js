@@ -62,4 +62,5 @@ export default {
     },
   ],
   nextFormStep: 'employmentForm',
+  formSubmitText: 'Next',
 }

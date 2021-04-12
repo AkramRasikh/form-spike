@@ -1,5 +1,4 @@
 import {useState, useEffect} from 'react'
-import {createUser, createEmployment, createPayroll} from '../api-client'
 
 const useFormHandler = ({
   formStep,
@@ -9,11 +8,8 @@ const useFormHandler = ({
 }) => {
   const [fieldStates, setFieldStates] = useState(forms)
   const [sidebarProgress, setSidebarProgress] = useState(sidebarProgressSteps)
-  const [formSubmissionText, setFormSubmissionText] = useState('Next')
   const [masterRequire, setMasterRequire] = useState(false)
-  const [employeeCreated, setEmployeeCreated] = useState(false)
   const [collectiveFormState, setCollectiveFormState] = useState({})
-  const [userId, setUserId] = useState('')
 
   const {
     firstName,
@@ -34,6 +30,9 @@ const useFormHandler = ({
           if (sideStep.step === 'personalInfoForm') {
             return {...sideStep, status: 'success'}
           }
+          if (sideStep.step === 'employmentForm') {
+            return {...sideStep, nextStep: 'reviewAndSubmit'}
+          }
           return sideStep
         }),
       )
@@ -53,69 +52,67 @@ const useFormHandler = ({
           return sideStep
         }),
       )
-      setFormSubmissionText('submit')
     }
+    setLoading(false)
   }
 
-  const createUserFunc = async () => {
-    try {
-      const id = await createUser({firstName, email, lastName})
-      setUserId(id)
-      setLoading(false)
-    } catch (error) {
-      setLoading(false)
-    }
-    checkIfEmployee(role)
+  const createEmploymentFunc = () => {
+    setSidebarProgress(prev =>
+      prev.map(sideStep => {
+        if (sideStep.step === 'employmentForm') {
+          return {...sideStep, status: 'success'}
+        }
+        return sideStep
+      }),
+    )
+    setLoading(false)
   }
 
-  const createEmploymentFunc = async () => {
-    try {
-      await createEmployment({startDate, department, userId})
-      setFormSubmissionText('Submit')
-      setLoading(false)
-      setEmployeeCreated(true)
-      setSidebarProgress(prev =>
-        prev.map(sideStep => {
-          if (sideStep.step === 'employmentForm') {
-            return {...sideStep, status: 'success'}
-          }
-          return sideStep
-        }),
-      )
-    } catch (error) {
-      setLoading(false)
-    }
+  const createPayrollFunc = () => {
+    setSidebarProgress(prev =>
+      prev.map(sideStep => {
+        if (sideStep.step === 'payrollForm') {
+          return {...sideStep, status: 'success'}
+        }
+        return sideStep
+      }),
+    )
+    setLoading(false)
   }
 
-  const createPayrollFunc = async () => {
-    try {
-      await createPayroll({userId, startDate, salary})
-      setSidebarProgress(prev =>
-        prev.map(sideStep => {
-          if (sideStep.step === 'payrollForm') {
-            return {...sideStep, status: 'success'}
-          }
-          return sideStep
-        }),
-      )
-      setLoading(false)
-    } catch (error) {
-      setLoading(false)
-    }
-  }
-
-  useEffect(async () => {
-    if (firstName && email && lastName && !userId) {
+  useEffect(() => {
+    if (firstName && email && lastName) {
       setLoading(true)
-      createUserFunc()
-    } else if (startDate && department && userId && !employeeCreated) {
+      checkIfEmployee()
+    }
+  }, [firstName, email, lastName])
+
+  useEffect(() => {
+    if (startDate && department) {
       setLoading(true)
       createEmploymentFunc()
-    } else if (startDate && salary && employeeCreated) {
+    }
+  }, [startDate, department])
+
+  useEffect(() => {
+    if (startDate && salary) {
       setLoading(true)
       createPayrollFunc()
     }
-  }, [collectiveFormState])
+  }, [startDate, department])
+
+  const submitAllDetails = () => {
+    setLoading(true)
+    setSidebarProgress(prev =>
+      prev.map(sideStep => {
+        if (sideStep.step === 'createAllDetails') {
+          return {...sideStep, status: 'success'}
+        }
+        return sideStep
+      }),
+    )
+    setLoading(false)
+  }
 
   if (fieldStates[formStep]) {
     return {
@@ -123,8 +120,9 @@ const useFormHandler = ({
         fields: fieldStates[formStep].fields,
         setFormValues: setCollectiveFormState,
         nextFormStep: fieldStates[formStep].nextFormStep,
+        formSubmitText: fieldStates[formStep].formSubmitText,
+        formValues: collectiveFormState,
       },
-      formSubmissionText,
       masterRequire,
       sidebarProgress,
     }
@@ -132,6 +130,7 @@ const useFormHandler = ({
   return {
     details: collectiveFormState,
     sidebarProgress,
+    submitAllDetails,
   }
 }
 

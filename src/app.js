@@ -13,9 +13,10 @@ function App() {
   const {
     formState,
     details,
-    formSubmissionText,
+    formSubmissionText = 'Next',
     masterRequire,
     sidebarProgress,
+    submitAllDetails,
   } = useFormHandler({
     formStep,
     forms,
@@ -27,9 +28,11 @@ function App() {
     'loading-class': isLoading,
   })
 
-  const heading = formState
-    ? 'Onboarding new user'
-    : 'You are fully onboarded 😃'
+  const heading =
+    formState || formStep !== 'reviewAndSubmit'
+      ? 'Onboarding new user'
+      : 'You are fully onboarded 😃'
+
   return (
     <div className={containerClasses}>
       <Navbar />
@@ -50,7 +53,11 @@ function App() {
               {...formState}
             />
           ) : (
-            <CompletedDetails details={details} formKey={formKey} />
+            <CompletedDetails
+              details={details}
+              formKey={formKey}
+              submitAllDetails={submitAllDetails}
+            />
           )}
         </div>
       </div>

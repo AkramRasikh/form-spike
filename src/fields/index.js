@@ -14,18 +14,26 @@ export default {
       text: '1. Personal info',
       step: 'personalInfoForm',
       helperText: '',
+      nextStep: 'employmentForm',
     },
     {
       id: 2,
       text: '2. Employment',
       step: 'employmentForm',
       helperText: '',
+      nextStep: 'payrollForm',
     },
     {
       id: 3,
       text: '3. Payroll',
       step: 'payrollForm',
       helperText: 'For "Employees"',
+      nextStep: 'reviewAndSubmit',
+    },
+    {
+      id: 4,
+      text: '4. Review details & Submit',
+      step: 'createAllDetails',
     },
   ],
   formKey: {

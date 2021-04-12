@@ -25,4 +25,5 @@ export default {
     },
   ],
   nextFormStep: 'payrollForm',
+  formSubmitText: 'Next',
 }
